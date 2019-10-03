@@ -14,7 +14,6 @@ defmodule Chex.Game do
             captures: []
 
   @type t() :: %__MODULE__{}
-  @type move() :: {Chex.Square.t(), Chex.Square.t()}
 
   @starting_pos "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
@@ -37,7 +36,8 @@ defmodule Chex.Game do
     |> update_fen()
   end
 
-  @spec move(Chex.Game.t(), Chex.Game.move() | String.t()) :: Chex.Game.t() | {:error, atom}
+  @spec move(Chex.Game.t(), {Chex.Square.t(), Chex.Square.t()} | String.t()) ::
+          Chex.Game.t() | {:error, atom}
   def move(game, move) when byte_size(move) == 4 do
     {from, to} = String.split_at(move, 2)
     move(game, {Chex.Square.from_string(from), Chex.Square.from_string(to)})
@@ -63,7 +63,7 @@ defmodule Chex.Game do
     end
   end
 
-  @spec add_move(Chex.Game.t(), Chex.Game.move()) :: Chex.Game.t()
+  @spec add_move(Chex.Game.t(), {Chex.Square.t(), Chex.Square.t()}) :: Chex.Game.t()
   defp add_move(%Chex.Game{moves: moves} = game, move) do
     game
     |> Map.put(:moves, [move | moves])
